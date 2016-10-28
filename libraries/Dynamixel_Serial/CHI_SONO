@@ -1,0 +1,4 @@
+da dove viene: indagare
+originale va su Serial
+modifica: da Serial a Serial1
+contiene la patch per l'acceleration goal (andrebbe portata su savage/DynamixelSerial*)
