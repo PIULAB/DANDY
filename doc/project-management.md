@@ -9,63 +9,63 @@ Date delle demo:
   19 dicembre
 
 
-### joypad ###
+#### joypad ####
 risultato: il joystick riproduce la bottoniera con l'aggiunta dell'intensità
 resp: Enrico
 data: 7 novembre
 stato: fatto in python, fare porting in c++
 
 
-### struttura ###
+#### struttura ####
 resp: Karim
 risultato: braccio a 3 gradi di libertà, design con tubi
 data: 7 novembre
 stato: in corso
 
 
-### project management ###
+#### project management ####
 resp: Enrico
 risultato: un designer assume l'incarico di progettare una mano underactuated a tre dita
 data: 7 novembre
 stato: in corso
 
 
-### project management ###
-resp: Marinella
-risultato: ordine di 5 MX12 da Robotis Korea
-data: 7 novembre
-stato: in corso
+    #### project management ####
+    resp: Marinella
+    risultato: ordine dei motori da Robotis Korea
+    data: 14 novembre
+    stato: in corso
 
 
-    ### vincoli ###
+    #### vincoli ####
     risultato: dire il peso in punta tollerato dal nuovo design
     resp: Stefano
     data: 14 novembre
     stato: non iniziato
     
     
-    ### braccio ###
+    #### braccio ####
     resp: Karim
     risultato: braccio a 3 gradi di libertà, design con scocche portanti
     data: 14 novembre
     stato: non iniziato
     
     
-    ### base ###
+    #### base ####
     resp: Valerio
     risultato: base in plastica stampata con alloggi per l'elettronica
     data: 14 novembre
     stato: non iniziato
     
     
-    ### joypad ###
+    #### joypad ####
     risultato: impugnatura per il joypad validata da Giulia
     resp: Karim
     data: 14 novembre
     stato: non iniziato
     
     
-    ### prodotto finito ###
+    #### prodotto finito ####
     resp: Stefano
     risultato: cablatura e on/off switch definitivi
       - alimentazione 220V + cavo 12V + connettore 12V
@@ -75,7 +75,7 @@ stato: in corso
     stato: in corso
         
         
-        ### smartness ###
+        #### smartness ####
         resp: Enrico
         risultato:
           1) migliore dinamica dei movimenti (inizio piano, aumento velocità su pressione continuata, ecc.)
@@ -84,7 +84,7 @@ stato: in corso
         stato: non iniziato
         
         
-        ### polso ###
+        #### polso ####
         CRITICO: la progettazione varia in base alla disponibilità dei motori: Dynamixel o Servo RC
         risultato: una struttura motorizzata fornisce i rimanenti 2 gradi di libertà
         data: 21 novembre
@@ -92,22 +92,22 @@ stato: in corso
         stato: ricerca del responsabile
         
         
-                ### mano ###
+                #### mano ####
                 risultato: realizzare una mano underactuated a tre dita
                 data: 5 dicembre
                 stato: ricerca del responsabile
                 
-###############################    
+#########################################    
 Task terminati:
 
-### test del margine di coppia su mx64 singolo e mx64 doppio ###
+#### test del margine di coppia su mx64 singolo e mx64 doppio ####
 risultato: dire quanto peso sulla punta si può caricare lasciando il motore ragionevolmente freddo
 resp: Stefano
 data: 29 ottobre
 stato: fatto, margine sufficiente: 500 grammi in punta agevolmente
 
 
-### joypad: tecnologia ###
+#### joypad: tecnologia ####
 resp: Stefano
 risultato: acquistare un joystick a due assi e connetterlo a Arduino
 data: 7 novembre
