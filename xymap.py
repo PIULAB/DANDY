@@ -4,7 +4,7 @@ from inclusion import *
 import time
 
 SPOT = 60
-DIAGONAL_SPOT = 100
+DIAGONAL_SPOT = 0
 CENTER = 512
 
 maps = [
@@ -22,7 +22,6 @@ lines = {
 
 ser = serial.Serial('/dev/ttyACM0', 115200)
 time.sleep(2)
-obj = {'minimo': 1000000000, 'massimo': 0}
 
 def main():
   count = 0
@@ -60,21 +59,20 @@ def analyze_position(payload):
       zone = i
       break
 
-  if zone == 4:
-    # None
-    print P0, 'SPOT'
+  if zone >= 4:
+    ser.write('speed_A:1\n')
+    ser.write('speed_B:1\n')
+    ser.write('speed_C:1\n')
+    ser.write('speed_D:1\n')
   else:
     speed = point_to_line(P0, lines[zone][0], lines[zone][1])
     direction = is_left(P0, lines[zone][0], lines[zone][1]) < 0
     if zone >= 2:
       direction = not direction
 
-    obj['minimo'] = min(obj['minimo'], int(round(speed/8)))
-    obj['massimo'] = max(obj['massimo'], int(round(speed/8)))
-    # print obj
-
-    ser.write('speed_A:%(speed)s\n' % {'speed': int(round(speed))+1})  # TODO better map from speed to Dynamixel speed
-    ser.write('direction_A:%(direction)s\n' % {'direction': {False: 'CCW', True: 'CW'}[direction]})
+    suffix = {0:'_A', 1:'_B', 2:'_C', 3:'_D'}[zone]
+    ser.write('speed%(suffix)s:%(speed)s\n' % {'suffix': suffix, 'speed': int(round(speed/4))+1})
+    ser.write('direction%(suffix)s:%(direction)s\n' % {'suffix': suffix, 'direction': {False: 'CCW', True: 'CW'}[direction]})
 
     print P0, ['A', 'B', 'C', 'D'][zone], speed, {True: 'forward', False: 'backward'}[direction]
 

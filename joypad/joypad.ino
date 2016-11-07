@@ -1,12 +1,17 @@
 #include <Dynamixel_Serial.h>
 
 #define SERVO_ID_1 0x01
+#define SERVO_ID_2 0x02
+#define SERVO_ID_3 0x04
+#define SERVO_ID_4 0x03
 
 #define SERVO_ControlPin 0x02
 #define SERVO_Baudrate 57600
 
-#define CW_LIMIT_1 1024
-#define CCW_LIMIT_1 3072
+#define CW_LIMIT 0x3ff
+#define CCW_LIMIT 0xbff
+//#define CW_LIMIT 0x0
+//#define CCW_LIMIT 0xfff
 
 String pc_data = "";
 boolean pc_data_complete = false;
@@ -16,7 +21,13 @@ void setup() {
   Dynamixel.begin(SERVO_Baudrate, SERVO_ControlPin);
   delay(1000);
 
-  Dynamixel.setMode(SERVO_ID_1, SERVO, CW_LIMIT_1, CCW_LIMIT_1);
+  Dynamixel.setMode(SERVO_ID_1, SERVO, CW_LIMIT, CCW_LIMIT);
+  Dynamixel.setMode(SERVO_ID_2, SERVO, CW_LIMIT, CCW_LIMIT);
+  Dynamixel.setMode(SERVO_ID_3, SERVO, CW_LIMIT, CCW_LIMIT);
+  Dynamixel.setMode(SERVO_ID_4, SERVO, CW_LIMIT, CCW_LIMIT);
+
+  Serial.println("{}");
+//  Dynamixel.servo(SERVO_ID_3, CW_LIMIT, 0x30);
 
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
@@ -52,21 +63,65 @@ void loop() {
 }
 
 unsigned int speed_1 = 0;
-unsigned int limit_1 = CW_LIMIT_1;
+unsigned int speed_2 = 0;
+unsigned int speed_3 = 0;
+unsigned int speed_4 = 0;
+unsigned int limit_1 = CW_LIMIT;
+unsigned int limit_2 = CW_LIMIT;
+unsigned int limit_3 = CCW_LIMIT;
+unsigned int limit_4 = CW_LIMIT;
 void execute(String key, String value) {
   if (key == "speed_A") {
     speed_1 = abs(value.toInt());
+    Dynamixel.servo(SERVO_ID_1, limit_1, speed_1);
     Serial.println("{\"debug\": \"" + String(speed_1) + "\"}");
+  } else if (key == "speed_B") {
+    speed_2 = speed_3 = abs(value.toInt());
+    Dynamixel.servo(SERVO_ID_2, limit_2, speed_2);
+    Dynamixel.servo(SERVO_ID_3, limit_3, speed_3);
+    Serial.println("{\"debug\": \"" + String(speed_2) + "\"}");
+  } else if (key == "speed_C") {
+    speed_4 = abs(value.toInt());
+    Dynamixel.servo(SERVO_ID_4, limit_4, speed_4);
+    Serial.println("{\"debug\": \"" + String(speed_4) + "\"}");
+  } else if (key == "speed_D") {
+//    speed = abs(value.toInt());
+//    id = SERVO_ID_4;
+//    Dynamixel.servo(id, limit, speed);
+//    Serial.println("{\"debug\": \"" + String(speed_4) + "\"}");
   } else if (key == "direction_A") {
     if (value == "CCW") {
-      limit_1 = CCW_LIMIT_1;
-      Serial.println("{\"debug\": \"ccw\"}");
+      limit_1 = CCW_LIMIT;
     } else {
-      limit_1 = CW_LIMIT_1;
-      Serial.println("{\"debug\": \"cw\"}");
+      limit_1 = CW_LIMIT;
     }
+    Serial.println("{\"limit\":\"" + String(limit_1) + "\"}");
+    Dynamixel.servo(SERVO_ID_1, limit_1, speed_1);
+  } else if (key == "direction_B") {
+    if (value == "CCW") {
+      limit_2 = CCW_LIMIT;
+      limit_3 = CW_LIMIT;
+    } else {
+      limit_2 = CW_LIMIT;
+      limit_3 = CCW_LIMIT;
+    }
+    Serial.println("{}");
+    Dynamixel.servo(SERVO_ID_2, limit_2, speed_2);
+    Dynamixel.servo(SERVO_ID_3, limit_3, speed_3);
+  } else if (key == "direction_C") {
+    if (value == "CCW") {
+      limit_4 = CCW_LIMIT;
+    } else {
+      limit_4 = CW_LIMIT;
+    }
+    Serial.println("{}");
+    Dynamixel.servo(SERVO_ID_4, limit_4, speed_4);
+  } else if (key == "direction_D") {
+//    limit = value == "CCW" ?CCW_LIMIT :CW_LIMIT;
+//    id = SERVO_ID_4;
+    Serial.println("{}");
+//    Dynamixel.servo(id, limit, speed);
   }
-  Dynamixel.servo(SERVO_ID_1, limit_1, speed_1);
 }
 
 // TODO check excess size of pc_data
