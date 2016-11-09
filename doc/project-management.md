@@ -1,7 +1,7 @@
 Todo-List progetto Giulia - 
 Date delle demo: 
-* 7 novembre
-  14 novembre
+  7 novembre
+* 14 novembre
   21 novembre
   28 novembre
   5 dicembre
@@ -9,90 +9,74 @@ Date delle demo:
   19 dicembre
 
 
-#### joypad ####
-risultato: il joystick riproduce la bottoniera con l'aggiunta dell'intensità
+#### project management ####
 resp: Enrico
-data: 7 novembre
-stato: fatto in python, fare porting in c++
-
-
-#### struttura ####
-resp: Karim
-risultato: braccio a 3 gradi di libertà, design con tubi
-data: 7 novembre
+risultato: un designer assume l'incarico di progettare una mano underactuated a tre dita
+data: 14 novembre
 stato: in corso
 
 
 #### project management ####
-resp: Enrico
-risultato: un designer assume l'incarico di progettare una mano underactuated a tre dita
-data: 7 novembre
+resp: Marinella
+risultato: ordine dei motori da Robotis Korea
+data: 14 novembre
+stato: non iniziato
+
+
+  #### struttura ####
+resp: Karim
+risultato: braccio a 3 gradi di libertà, design definitivo
+data: 14 novembre
+stato: non iniziato
+
+
+	#### prodotto finito ####
+resp: Stefano
+risultato: cablatura e on/off switch definitivi
+- alimentazione 220V + cavo 12V + connettore 12V
+- joypad cable + connettori
+- alloggio per la presa USB di programmazione
+data: 14 novembre
 stato: in corso
-
-
-    #### project management ####
-    resp: Marinella
-    risultato: ordine dei motori da Robotis Korea
-    data: 14 novembre
-    stato: in corso
-
-
-    #### vincoli ####
-    risultato: dire il peso in punta tollerato dal nuovo design
-    resp: Stefano
-    data: 14 novembre
-    stato: non iniziato
-    
-    
-    #### braccio ####
-    resp: Karim
-    risultato: braccio a 3 gradi di libertà, design con scocche portanti
-    data: 14 novembre
-    stato: non iniziato
-    
-    
-    #### base ####
-    resp: Valerio
-    risultato: base in plastica stampata con alloggi per l'elettronica
-    data: 14 novembre
-    stato: non iniziato
-    
-    
-    #### joypad ####
-    risultato: impugnatura per il joypad validata da Giulia
-    resp: Karim
-    data: 14 novembre
-    stato: non iniziato
-    
-    
-    #### prodotto finito ####
-    resp: Stefano
-    risultato: cablatura e on/off switch definitivi
-      - alimentazione 220V + cavo 12V + connettore 12V
-      - joypad cable + connettori
-      - alloggio per la presa USB di programmazione
-    data: 14 novembre
-    stato: in corso
         
         
-        #### smartness ####
+  #### vincoli ####
+  risultato: dire il peso in punta tollerato dal nuovo design
+  resp: Stefano
+  data: 21 novembre
+  stato: non iniziato
+  
+  
+	#### struttura ####
+	resp: ?
+	risultato: base in plastica stampata con alloggi per l'elettronica
+	data: 21 novembre
+	stato: non iniziato
+
+
+	#### joypad ####
+	risultato: impugnatura per il joypad validata da Giulia
+	resp: Marinella
+	data: 21 novembre
+	stato: non iniziato
+
+
+        #### usability ####
         resp: Enrico
-        risultato:
-          1) migliore dinamica dei movimenti (inizio piano, aumento velocità su pressione continuata, ecc.)
-          2) realizzazione di due movimenti preimpostati
+        risultato: realizzazione di almeno due movimenti preimpostati
         data: 21 novembre
         stato: non iniziato
         
         
         #### polso ####
-        CRITICO: la progettazione varia in base alla disponibilità dei motori: Dynamixel o Servo RC
         risultato: una struttura motorizzata fornisce i rimanenti 2 gradi di libertà
         data: 21 novembre
-        resp: 
-        stato: ricerca del responsabile
+        resp: Enrico, Stefano
+        stato: non iniziato
         
         
                 #### mano ####
+                resp: ?
                 risultato: realizzare una mano underactuated a tre dita
                 data: 5 dicembre
                 stato: ricerca del responsabile
@@ -112,5 +96,19 @@ resp: Stefano
 risultato: acquistare un joystick a due assi e connetterlo a Arduino
 data: 7 novembre
 stato: fatto
+
+#### joypad ####
+risultato: il joystick riproduce la bottoniera con l'aggiunta dell'intensità
+resp: Enrico
+data: 7 novembre
+stato: fatto in python, fare porting in c++
+
+
+#### struttura ####
+resp: Karim
+risultato: braccio a 3 gradi di libertà, design con tubi
+data: 7 novembre
+stato: completato, design non definitivo
+
 
 
