@@ -10,29 +10,22 @@ Date delle demo:
 
 
 #### project management ####
-resp: Enrico
-risultato: un designer assume l'incarico di progettare una mano underactuated a tre dita
+resp: Marinella
+risultato: ordine dei motori da Robotis Korea
+data: 14 novembre
+stato: concluso
+
+
+#### struttura ####
+resp: Karim
+risultato: braccio a 3 gradi di libertà, design definitivo
 data: 14 novembre
 stato: in corso
 
 
-#### project management ####
-resp: Marinella
-risultato: ordine dei motori da Robotis Korea
-data: 14 novembre
-stato: non iniziato
-
-
-  #### struttura ####
-resp: Karim
-risultato: braccio a 3 gradi di libertà, design definitivo
-data: 14 novembre
-stato: non iniziato
-
-
-	#### prodotto finito ####
+#### prodotto ####
 resp: Stefano
-risultato: cablatura e on/off switch definitivi
+risultato: BOM per cablatura e on/off switch
 - alimentazione 220V + cavo 12V + connettore 12V
 - joypad cable + connettori
 - alloggio per la presa USB di programmazione
@@ -40,46 +33,47 @@ data: 14 novembre
 stato: in corso
         
         
-  #### vincoli ####
-  risultato: dire il peso in punta tollerato dal nuovo design
+  #### prodotto ####
   resp: Stefano
+  risultato: cablatura e on/off switch definitivi
+  data: 21 novembre
+  stato: in corso
+
+  
+  #### joypad ####
+  risultato: Giulia prova il joypad e disegna una mappa dei percorsi favorevoli
+  resp: Marinella
+  data: 21 novembre
+  stato: non iniziato
+
+
+  #### usability ####
+  resp: Enrico
+  risultato: realizzazione di almeno due movimenti preimpostati
   data: 21 novembre
   stato: non iniziato
   
   
-	#### struttura ####
-	resp: ?
-	risultato: base in plastica stampata con alloggi per l'elettronica
-	data: 21 novembre
-	stato: non iniziato
+  #### struttura ####
+  resp: Stefano, Enrico
+  risultato: 4° e 5° grado di libertà disegnato e stampato
+  data: 21 novembre
+  stato: non iniziato
 
 
-	#### joypad ####
-	risultato: impugnatura per il joypad validata da Giulia
-	resp: Marinella
-	data: 21 novembre
-	stato: non iniziato
 
+    #### struttura ####
+    resp: ?
+    risultato: copertura per l'intero braccio
+    data: 5 dicembre
+    stato: non iniziato
 
-        #### usability ####
-        resp: Enrico
-        risultato: realizzazione di almeno due movimenti preimpostati
-        data: 21 novembre
-        stato: non iniziato
         
-        
-        #### polso ####
-        risultato: una struttura motorizzata fornisce i rimanenti 2 gradi di libertà
-        data: 21 novembre
-        resp: Enrico, Stefano
-        stato: non iniziato
-        
-        
-                #### mano ####
-                resp: ?
-                risultato: realizzare una mano underactuated a tre dita
-                data: 5 dicembre
-                stato: ricerca del responsabile
+    #### mano ####
+    resp: ?
+    risultato: realizzare una mano underactuated a tre dita
+    data: 5 dicembre
+    stato: ricerca del responsabile
                 
 #########################################    
 Task terminati:
