@@ -1,26 +1,12 @@
 Todo-List progetto Giulia - 
 Date delle demo: 
   7 novembre
-* 14 novembre
-  21 novembre
+  14 novembre
+* 21 novembre
   28 novembre
   5 dicembre  (7 dicembre - DEMO PUBBLICA)
   12 dicembre
   19 dicembre
-
-
-#### project management ####
-DATA: 14 novembre
-resp: Marinella
-risultato: gli MX-12 sono ordinati a Robotis Korea
-stato: fatto
-
-
-#### struttura ####
-DATA: 14 novembre
-resp: Karim
-risultato: il braccio a 3 gradi di libertà è stampato in maniera definitiva
-stato: in corso
 
 
 #### prodotto ####
@@ -33,19 +19,11 @@ risultato: esiste una BOM per cablatura e on/off switch e un elenco di fornitori
 stato: in corso
 
 
-#### joypad ####
-DATA: 14 novembre
-resp: Enrico e Stefano
-risultato: il joypad comanda il braccio a 3 gradi di libertà fornendo la posizione cartesiana (inverse kinematic) 
-stato: in corso
-
-
   #### joypad ####
-  DATA: 21 novembre (CRITICO!)
-  risultato: Giulia prova il joypad, disegna una mappa dei percorsi raggiungibili
-             e valida le assunzioni fatte fin'ora
-  resp: Marinella per l'organizzazione, Enrico per il sw di plotting
-  stato: 
+  DATA: 21 novembre
+  resp: Enrico e Stefano
+  risultato: il joypad comanda il braccio a 3 gradi di libertà, data la posizione cartesiana della punta (inverse kinematic) 
+  stato: in corso
 
 
   #### prodotto ####
@@ -70,8 +48,23 @@ stato: in corso
   stato:
 
   
+    #### tools ####
+    DATA: 28 novembre (CRITICO!)
+    risultato: esiste un software che traccia a video il percorso del joystick
+    resp: Enrico
+    stato: 
+  
+  
+    #### joypad ####
+    DATA: 28 novembre (CRITICO!)
+    risultato: Giulia prova il joypad, disegna una mappa dei percorsi raggiungibili
+               e valida le assunzioni fatte fin'ora
+    resp: Marinella
+    stato: 
+  
+  
     #### struttura ####
-    DATA: 21 novembre
+    DATA: 28 novembre
     resp: Stefano, Enrico
     risultato: 4° e 5° grado di libertà sono funzionanti e integrati con il software 
     stato: in corso
@@ -146,4 +139,18 @@ resp: Karim
 risultato: braccio a 3 gradi di libertà, design con tubi
 DATA: 7 novembre
 stato: fatto
+
+#### project management ####
+DATA: 14 novembre
+resp: Marinella
+risultato: gli MX-12 sono ordinati a Robotis Korea
+stato: fatto
+
+
+#### struttura ####
+DATA: 16 novembre
+resp: Karim
+risultato: il braccio a 3 gradi di libertà è stampato in maniera definitiva
+stato: fatto
+
 

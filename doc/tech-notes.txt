@@ -1,1 +1,3 @@
 arduino [--verify|--upload] [--board package:arch:board[:parameters]] [--port portname] [--pref name=value] [-v|--verbose] [--preserve-temp-files] [FILE.ino]
+
+~/arduino-1.6.10/arduino --upload joypad/joypad.ino
