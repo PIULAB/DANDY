@@ -3,16 +3,16 @@
   <KinBody file="dandyarm.kinbody.xml"/>
   <KinBody file="dandyhand.kinbody.xml"/>
 
- <kinbody>
-   <body name="handbase">
-     <offsetfrom>wam7</offsetfrom>
-   </body>
-   <joint name="dummyhand" type="hinge" enable="false">
-     <body>wam7</body>
-     <body>handbase</body>
-     <limits>0 0</limits>
-   </joint>
- </kinbody>
+  <kinbody>
+    <body name="handbase">
+      <offsetfrom>wam7</offsetfrom>
+    </body>
+    <joint name="dummyhand" type="hinge" enable="false">
+      <body>wam7</body>
+      <body>handbase</body>
+      <limits>0 0</limits>
+    </joint>
+  </kinbody>
 
   <Manipulator name="arm">
     <base>wam0</base>
