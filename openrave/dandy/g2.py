@@ -36,15 +36,19 @@ def main(env,options):
                 ikparam = IkParameterization(target, IkParameterization.Type.Translation3D)
             # solutions = ikmodel.manip.FindIKSolutions(ikparam,IkFilterOptions.CheckEnvCollisions)
             t0 = time.time()
-            solution = ikmodel.manip.FindIKSolution(ikparam, IkFilterOptions.IgnoreSelfCollisions)
+            solution = ikmodel.manip.FindIKSolution(ikparam, IkFilterOptions.CheckEnvCollisions)
+
             if previous_none and solution is not None:
                 print time.time() - t0
             previous_none = solution is None
 
             if solution is not None:
-                robot.SetDOFValues(solution,ikmodel.manip.GetArmIndices())
-                T = ikmodel.manip.GetTransform()
-                env.UpdatePublishedBodies()
+              r_server.set('q', json.dumps({'q0': solution[0], 'q1': solution[1], 'q2': solution[2], 'q3': solution[3]}))
+
+              robot.SetDOFValues(solution,ikmodel.manip.GetArmIndices())
+              T = ikmodel.manip.GetTransform()
+              q = robot.GetDOFValues()
+              env.UpdatePublishedBodies()
 
 if __name__ == "__main__":
     class opt:

@@ -1,24 +1,53 @@
 from __future__ import division
-import redis, json
+import redis, json, math
 import pyglet
 
-r_server = redis.Redis('localhost')
 window = pyglet.window.Window()
+
+class point:
+  def __init__(self, x, y):
+    self.x = float(x)
+    self.y = float(y)
+
+  def norm(self):
+    return point(self.x/window.width*2.0 - 1, self.y/window.height*2.0 - 1)
+
+  def denorm(self):
+    return point((self.x + 1) * window.width / 2.0, (self.y + 1) * window.height / 2.0)
+
+r_server = redis.Redis('localhost')
 label = pyglet.text.Label('Mouse (x,y)', font_name='Times New Roman',
                           font_size=18, x=window.width // 2, y=window.height // 2,
                           anchor_x='center', anchor_y='center')
 x = y = z = 0
+q = 0
 
 @window.event
 def on_draw():
     window.clear()
     label.draw()
+    q0 = json.loads(r_server.get('q'))['q0']
+    q1 = json.loads(r_server.get('q'))['q1']
+    q2 = json.loads(r_server.get('q'))['q2']
+
+    p0 = point(-0.5,0.2).denorm()
+    p1 = point(-0.5 + math.sin(q0), 0.2 + math.cos(q0)).denorm()
+    pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (p0.x, p0.y, p1.x, p1.y)))
+
+    p0 = point(0, 0.2).denorm()
+    p1 = point(0 + math.sin(q1), 0.2 + math.cos(q1)).denorm()
+    pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (p0.x, p0.y, p1.x, p1.y)))
+
+    p0 = point(0.5, 0.2).denorm()
+    p1 = point(0.5 + math.sin(q2), 0.2 + math.cos(q2)).denorm()
+    pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (p0.x, p0.y, p1.x, p1.y)))
+
 
 @window.event
 def on_mouse_motion(xm, ym, dx, dy):
     global x, y, z
-    x = xm/window.width*2.0-1
-    y = ym/window.height*2.0-1
+    x = xm/window.width*2.0 - 1
+    y = ym/window.height*2.0 - 1
     # z = ((abs(x) - .5) * 2) ** 2
     # z = -0.3  # for dandy.robot
     r_server.set('xy', json.dumps({'x': x, 'y': y, 'z': z}))
