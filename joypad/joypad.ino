@@ -1,9 +1,11 @@
 #include <Dynamixel_Serial.h>
 
-#define SERVO_ID_1 0x01
+#define SERVO_ID_1 0x06
 #define SERVO_ID_2 0x02
-#define SERVO_ID_3 0x04
-#define SERVO_ID_4 0x03
+#define SERVO_ID_3 0x03
+#define SERVO_ID_4 0x04
+#define SERVO_ID_5 0x05
+//#define SERVO_ID_6 0x06
 
 #define SERVO_ControlPin 0x02
 #define SERVO_Baudrate 57600
@@ -25,6 +27,10 @@ void setup() {
   Dynamixel.setMode(SERVO_ID_2, SERVO, CW_LIMIT, CCW_LIMIT);
   Dynamixel.setMode(SERVO_ID_3, SERVO, CW_LIMIT, CCW_LIMIT);
   Dynamixel.setMode(SERVO_ID_4, SERVO, CW_LIMIT, CCW_LIMIT);
+//  Dynamixel.setMode(SERVO_ID_5, SERVO, CW_LIMIT, CCW_LIMIT);
+//  Dynamixel.setMode(SERVO_ID_6, SERVO, CW_LIMIT, CCW_LIMIT);
+
+  Dynamixel.ledState(SERVO_ID_1, ON);
 
   Serial.println("{}");
 //  Dynamixel.servo(SERVO_ID_3, CW_LIMIT, 0x30);
@@ -62,16 +68,29 @@ void loop() {
   check_serial();
 }
 
-unsigned int speed_1 = 0;
-unsigned int speed_2 = 0;
-unsigned int speed_3 = 0;
+unsigned int speed_1 = 30;
+unsigned int speed_2 = 30;
+unsigned int speed_3 = 30;
 unsigned int speed_4 = 0;
 unsigned int limit_1 = CW_LIMIT;
 unsigned int limit_2 = CW_LIMIT;
 unsigned int limit_3 = CCW_LIMIT;
 unsigned int limit_4 = CW_LIMIT;
 void execute(String key, String value) {
-  if (key == "speed_A") {
+  if (key == "angle_A") {
+    limit_1 = abs(value.toInt());
+    Dynamixel.servo(SERVO_ID_1, limit_1, speed_1);
+    Serial.println("{\"debug\": \"" + String(speed_1) + "\"}");
+  } else if (key == "angle_B") {
+    limit_2 = abs(value.toInt());
+    Dynamixel.servo(SERVO_ID_2, limit_2, speed_2);
+    Dynamixel.servo(SERVO_ID_3, abs(4096 - limit_2), speed_2);
+    Serial.println("{\"debug\": \"" + String(speed_2) + "\"}");
+  } else if (key == "angle_C") {
+    limit_3 = abs(value.toInt());
+    Dynamixel.servo(SERVO_ID_4, limit_3, speed_3);
+    Serial.println("{\"debug\": \"" + String(speed_3) + "\"}");
+  } else if (key == "speed_A") {
     speed_1 = abs(value.toInt());
     Dynamixel.servo(SERVO_ID_1, limit_1, speed_1);
     Serial.println("{\"debug\": \"" + String(speed_1) + "\"}");
