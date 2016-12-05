@@ -1,6 +1,6 @@
 #include <Dynamixel_Serial.h>
 
-#define SERVO_ID_1 0x06
+#define SERVO_ID_1 0x01
 #define SERVO_ID_2 0x02
 #define SERVO_ID_3 0x03
 #define SERVO_ID_4 0x04

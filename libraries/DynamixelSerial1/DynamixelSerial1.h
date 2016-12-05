@@ -133,9 +133,15 @@
 #define AX_SYNC_WRITE               131
 
 	// Specials ///////////////////////////////////////////////////////////////
+#ifndef OFF
 #define OFF                         0
+#endif
+#ifndef ON
 #define ON                          1
+#endif
+#ifndef LEFT
 #define LEFT						0
+#endif
 #define RIGTH                       1
 #define AX_BYTE_READ                1
 #define AX_BYTE_READ_POS            2
@@ -166,7 +172,9 @@
 #define AX_SPEED_LENGTH             5
 #define AX_GOAL_SP_LENGTH           7
 #define AX_ACTION_CHECKSUM			250
+#ifndef BROADCAST_ID
 #define BROADCAST_ID                254
+#endif
 #define AX_START                    255
 #define AX_CCW_AL_L                 255 
 #define AX_CCW_AL_H                 3
@@ -178,7 +186,7 @@
 
 #include <inttypes.h>
 
-class DynamixelClass {
+class DynamixelMX12Class {
 private:
 	
 	unsigned char Checksum; 
@@ -250,6 +258,6 @@ public:
 	int ledStatus(unsigned char ID, bool Status);
 };
 
-extern DynamixelClass Dynamixel;
+extern DynamixelMX12Class DynamixelMX12;
 
 #endif
