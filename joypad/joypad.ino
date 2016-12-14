@@ -1,3 +1,4 @@
+
 #include <Dynamixel_Serial.h>
 
 #define SERVO_ID_1 0x01

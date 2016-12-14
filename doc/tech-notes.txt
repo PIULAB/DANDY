@@ -1,3 +1,18 @@
 arduino [--verify|--upload] [--board package:arch:board[:parameters]] [--port portname] [--pref name=value] [-v|--verbose] [--preserve-temp-files] [FILE.ino]
 
 ~/arduino-1.6.10/arduino --upload joypad/joypad.ino
+
+ 1251  gcc --version
+ 1287  gcc -lstdc++ -o ik ik.cpp
+ 1288  gcc -lstdc++ -llapack -o ik ik.cpp
+ 1289  sudo update-alternatives --config gcc
+ 1290  gcc -lstdc++ -llapack -o ik ik.cpp
+ 1291  gcc -llapack -o ik ik.cpp -lstdc++
+ 1292  sudo update-alternatives --config gcc
+ 1293  gcc -llapack -o ik ik.cpp
+ 1294  gcc -llapack -o ik ik.cpp -lstdc++
+ 1300  gcc -llapack -o ik ik.cpp -lstdc++
+ 1301  gcc -o ik ik.cpp -llapack -lstdc++
+ 1302  gcc -o ik ik.cpp -llapack -lstdc++ -lm
+ 1327  gcc --version
+ 1359  gcc -o ik ik.cpp -lstdc++ -lm

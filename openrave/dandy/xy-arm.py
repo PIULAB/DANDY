@@ -3,7 +3,7 @@ import redis, json, math, time
 import pyglet
 import serial
 
-ser = serial.Serial('/dev/ttyACM0', 115200)
+ser = serial.Serial('/dev/ttyACM0', 57600)
 time.sleep(2)
 
 window = pyglet.window.Window()
