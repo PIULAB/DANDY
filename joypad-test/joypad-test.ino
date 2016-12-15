@@ -1,5 +1,4 @@
 #include <Dynamixel_Serial.h> // MX all but 12
-#include <DynamixelSerial1.h> // MX-12
 
 class Watch {
     long t0;
@@ -17,21 +16,15 @@ Watch::Watch () {
 #define SERVO_ID_2 0x02
 #define SERVO_ID_3 0x03
 #define SERVO_ID_4 0x04
-#define SERVO_ID_5 0x05
-#define SERVO_ID_6 0x06
 #define SPEED 50
 
 String pc_data = "";
 boolean pc_data_complete = false;
 
 void setup() {
-  Serial.begin(57600);
+  Serial.begin(115200);
 
-  DynamixelMX12.begin(850000, 2);
-  DynamixelMX12.setAngleLimit(SERVO_ID_5, 1024, 3072);
-  DynamixelMX12.setAngleLimit(SERVO_ID_6, 1024, 3072);
-
-  Dynamixel.begin(59000, 2);
+  Dynamixel.begin(57600, 2);
   Dynamixel.setMode(SERVO_ID_1, SERVO, 1024, 3072);
   Dynamixel.setMode(SERVO_ID_2, SERVO, 1592, 3413);
   Dynamixel.setMode(SERVO_ID_3, SERVO, 1592, 3413);
@@ -52,7 +45,7 @@ void loop() {
 
   if (abs(new_x - x) > 5 || abs(new_y - y) > 5) {
     x = new_x; y = new_y;
-    if (watch.after(100)) {
+    if (watch.after(500)) {
       watch.reset();
       Serial.println("{\"x\": " + String(x) + ", \"y\": " + String(y) + "}");
     }
@@ -89,12 +82,6 @@ void execute(String key, String value) {
   } else if (key == "angle_C") {
     angle = abs(value.toInt());
     position_mx(SERVO_ID_4, abs(4095 - angle), SPEED);
-  } else if (key == "angle_D") {
-    angle = abs(value.toInt());
-    position_mx12(SERVO_ID_5, angle, SPEED);
-  } else if (key == "angle_E") {
-    angle = abs(value.toInt());
-    position_mx12(SERVO_ID_6, angle, SPEED);
   }
 }
 
@@ -111,15 +98,10 @@ void check_serial() {
   }
 }
 
-void position_mx12(unsigned int id, unsigned int position, unsigned int speed) {
-  DynamixelMX12.begin(850000, 2);
-  DynamixelMX12.moveSpeed(id, position, speed);
-}
-
 void position_mx(unsigned int id, unsigned int position, unsigned int speed) {
-  Dynamixel.begin(59000, 2);
+//  Dynamixel.begin(59000, 2);
   Dynamixel.servo(id, position, speed);
-  Serial.println("1234567890");
+  Serial.println("{\"mx64\": \".\"}");
 }
 
 void stopAll() {
@@ -127,6 +109,4 @@ void stopAll() {
   position_mx(SERVO_ID_2, 2048, SPEED);
   position_mx(SERVO_ID_3, 4095-2048, SPEED);
   position_mx(SERVO_ID_4, 2048, SPEED);
-  position_mx12(SERVO_ID_5, 2048, SPEED);
-  position_mx12(SERVO_ID_6, 2048, SPEED);
 }

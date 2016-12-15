@@ -119,7 +119,7 @@ void position_mx12(unsigned int id, unsigned int position, unsigned int speed) {
 void position_mx(unsigned int id, unsigned int position, unsigned int speed) {
   Dynamixel.begin(59000, 2);
   Dynamixel.servo(id, position, speed);
-  Serial.println("1234567890");
+  Serial.println("{\"mx64\": \".\"}");
 }
 
 void stopAll() {
