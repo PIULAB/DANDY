@@ -1,5 +1,18 @@
 #include <Dynamixel_Serial.h> // MX all but 12
 
+class Watch {
+    long t0;
+  public:
+    Watch ();
+    boolean after (long ms) {return millis() - t0 >= ms;}
+    void reset () {t0 = millis();}
+};
+
+Watch::Watch () {
+  t0 = millis();
+}
+
+
 #define SERVO_ID_1 0x01
 #define SERVO_ID_2 0x02
 #define SERVO_ID_3 0x03
@@ -21,43 +34,50 @@ void setup() {
   pinMode(A1, INPUT);
 }
 
-int state = 0;
+enum STATES {INIT, TO_BASE, ACTION, STOP};
+
+STATES state = INIT;
 unsigned int p;
 unsigned int target = 2000;
 unsigned int start;
 long t0 = millis();
+Watch watch;
 
 void loop() {
-  if (state == 0) {
-    start = readPosition(SERVO_ID_4);
-    Serial.println(start);
-    if (abs(start - 1000) < 20 && millis() - t0 > 5000) 
-      state = 1;
-  } else if (state == 1) {
-    p = readPosition(SERVO_ID_4);
-    unsigned int value = f(start, target, p, SPEED);
-    position_mx(SERVO_ID_4, target, value);
-    if (p > 1200)
-      state = 2;
-  } else if (state == 2) {
-    
+  switch (state) {
+    case INIT: {
+      watch.reset();
+      state = TO_BASE;
+      break;
+    }
+    case TO_BASE: {
+      start = readPosition(SERVO_ID_4);
+      Serial.println(start);
+      if (abs(start - 1000) < 20 && watch.after(3000))
+        state = ACTION;
+      break;
+    }
+    case ACTION: {
+      p = readPosition(SERVO_ID_4);
+      unsigned int value = smooth(start, target, p, SPEED);
+      position_mx(SERVO_ID_4, target, value);
+      if (p > 1200)
+        state = STOP;
+      break;
+    }
+    case STOP: {
+      break;
+    }
   }
 }
 
-unsigned int f(unsigned int start, unsigned int target, unsigned int p, unsigned int topSpeed) {
-  float slice = 50;
+unsigned int smooth(unsigned int start, unsigned int target, unsigned int p, unsigned int topSpeed) {
+  float slice = abs(target - start) * 0.05;
   float x = abs(p - start) + 1;
   unsigned int value = (unsigned int) (topSpeed / slice * x);
   if (value == 0)
     value = 1;
-  Serial.print(x);
-  Serial.print(", ");
-  Serial.print(p);
-  Serial.print(", ");
-  Serial.println(value);
-  Serial.print(", ");
-  Serial.println(topSpeed / slice * x);
-  
+
   if (x > slice)
     return topSpeed;
   else
