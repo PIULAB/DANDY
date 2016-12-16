@@ -3,7 +3,6 @@ import redis, json, math, time
 import pyglet
 import serial
 
-buffer = ""
 ser = serial.Serial('/dev/ttyACM0', 57600)
 time.sleep(2)
 
@@ -15,10 +14,10 @@ class point:
     self.y = float(y)
 
   def norm(self):
-    return point(self.x/1024*2.0 - 1, self.y/1024*2.0 - 1)
+    return point(self.x/window.width*2.0 - 1, self.y/window.height*2.0 - 1)
 
   def denorm(self):
-    return point((self.x + 1) * 1024 / 2.0, (self.y + 1) * 1024 / 2.0)
+    return point((self.x + 1) * window.width / 2.0, (self.y + 1) * window.height / 2.0)
 
 
 r_server = redis.Redis('localhost')
@@ -28,7 +27,6 @@ label = pyglet.text.Label('Mouse (x,y)', font_name='Times New Roman',
 x = y = 0
 z = 0.8
 q = 0
-t0 = 0
 
 def denorm_dyna(q):
   return (q + math.pi/2) * 2048 / math.pi + 1023
@@ -36,14 +34,10 @@ def denorm_dyna(q):
 
 @window.event
 def on_draw():
-    global x, y, z, buffer, t0
-    # print ser.read(ser.inWaiting())
-
-    buffer += ser.read(ser.inWaiting())
+    print ser.read(ser.inWaiting())
 
     window.clear()
     label.draw()
-
     q0 = json.loads(r_server.get('q'))['q0']
     q1 = json.loads(r_server.get('q'))['q1']
     q2 = json.loads(r_server.get('q'))['q2']
@@ -60,46 +54,22 @@ def on_draw():
     p1 = point(0.5 + math.sin(q2), 0.2 + math.cos(q2)).denorm()
     pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (p0.x, p0.y, p1.x, p1.y)))
 
-    print 'angoli', int(denorm_dyna(q0)), int(denorm_dyna(q1)), int(denorm_dyna(q2))
+    print q1, int(denorm_dyna(q1))
     ser.write('angle_A:%(angle)s\n' % {'angle': int(denorm_dyna(q0))})
     ser.write('angle_B:%(angle)s\n' % {'angle': int(denorm_dyna(q1))})
     ser.write('angle_C:%(angle)s\n' % {'angle': int(denorm_dyna(q2))})
 
-    s = cutPayload()
-    print s
-    if s is None:
-      return
 
-    try:
-      payload = json.loads(s)
-
-      # discard too fast joystick positions
-      if payload.has_key('x'): # and time.time() - t0 > 0.1:
-        t0 = time.time()
-        print "payload", payload
-
-        if payload.has_key('x') and payload.has_key('y'):
-          x = payload['x'] / 1024 * 2.0 - 1
-          y = payload['y'] / 1024 * 2.0 - 1
-          r_server.set('xy', json.dumps({'x': x, 'y': y, 'z': z}))
-          print {'x': x, 'y': y, 'z': z}
-          label.text = '(x,y,z) = (%.3f, %.3f, %.3f)' % (x, y, z)
-        else:
-          print 'no X', payload
-
-    except ValueError:
-      print('10 garbage received')
-
-
-def cutPayload():
-    global buffer
-    if buffer.count('\n') == 0:
-      print "non cr"
-      return
-    i = buffer.index('\n')
-    s = buffer[:i]
-    buffer = buffer[i+1:]
-    return s
+@window.event
+def on_mouse_motion(xm, ym, dx, dy):
+    global x, y, z
+    x = xm/window.width*2.0 - 1
+    y = ym/window.height*2.0 - 1
+    # z = ((abs(x) - .5) * 2) ** 2
+    # z = -0.3  # for dandy.robot
+    r_server.set('xy', json.dumps({'x': x, 'y': y, 'z': z}))
+    print {'x': x, 'y': y, 'z': z}
+    label.text = '(x,y,z) = (%.3f, %.3f, %.3f)' % (x, y, z)
 
 @window.event
 def on_text_motion(motion):

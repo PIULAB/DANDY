@@ -19,7 +19,7 @@ Watch::Watch () {
 #define SERVO_ID_4 0x04
 #define SERVO_ID_5 0x05
 #define SERVO_ID_6 0x06
-#define SPEED 50
+#define SPEED 20
 
 String pc_data = "";
 boolean pc_data_complete = false;
@@ -33,8 +33,8 @@ void setup() {
 
   Dynamixel.begin(59000, 2);
   Dynamixel.setMode(SERVO_ID_1, SERVO, 1024, 3072);
-  Dynamixel.setMode(SERVO_ID_2, SERVO, 1592, 3413);
-  Dynamixel.setMode(SERVO_ID_3, SERVO, 1592, 3413);
+  Dynamixel.setMode(SERVO_ID_2, SERVO, 1024, 3072);  // 1592, 3413);
+  Dynamixel.setMode(SERVO_ID_3, SERVO, 1024, 3072);
   Dynamixel.setMode(SERVO_ID_4, SERVO, 682, 2048);
 
   stopAll();
@@ -66,7 +66,7 @@ void loop() {
     } else {
       String key = pc_data.substring(0, sep);
       String value = pc_data.substring(sep+1);
-      // Serial.println("{\"key\": \"" + key + "\", \"value\": \"" + value + "\" }");
+       Serial.println("{\"key\": \"" + key + "\", \"value\": \"" + value + "\" }");
       execute(key, value);
     }
     // clear the string:
