@@ -54,7 +54,7 @@ def on_draw():
     p1 = point(0.5 + math.sin(q2), 0.2 + math.cos(q2)).denorm()
     pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (p0.x, p0.y, p1.x, p1.y)))
 
-    print q1, int(denorm_dyna(q1))
+    print('angoli', int(denorm_dyna(q0)), int(denorm_dyna(q1)), int(denorm_dyna(q2)))
     ser.write('angle_A:%(angle)s\n' % {'angle': int(denorm_dyna(q0))})
     ser.write('angle_B:%(angle)s\n' % {'angle': int(denorm_dyna(q1))})
     ser.write('angle_C:%(angle)s\n' % {'angle': int(denorm_dyna(q2))})
