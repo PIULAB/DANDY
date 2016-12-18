@@ -41,9 +41,9 @@ void setup() {
   pinMode(A1, INPUT);
 }
 
-enum States {INIT, DISH_FREE, DISH_STILL, DISH_TO_EAT, EAT};  // TODO implement toString
+enum States {INIT, DISH_FREE, DISH_STILL, DISH_TO_EAT, EAT_FREE};
 
-int x, y;
+int x, y, prev_x, prev_y;
 Watch joy_on_dish_watch,
       joy_on_eat_watch,
       joy_still_watch,
@@ -63,12 +63,18 @@ void loop() {
   x = analogRead(A0);
   y = analogRead(A1);
 
+//  if (abs(x - prev_x) > 5 || abs( y - prev_y) > 5) {
+//    prev_x = x;
+//    prev_y = y;
+//    once_print(String(x) + "," + String(y));
+//  }
+
   s = state == INIT
     ?"INIT" :state == DISH_FREE
       ?"DISH_FREE" :state == DISH_STILL
         ?"DISH_STILL" :state == DISH_TO_EAT
-          ?"DISH_TO_EAT" :state == EAT
-            ?"EAT" :"";
+          ?"DISH_TO_EAT" :state == EAT_FREE
+            ?"EAT_FREE" :"";
   once_print(s);
 
   switch (state) {
@@ -90,9 +96,9 @@ void loop() {
       execute("angle_A", "2341");
       execute("angle_B", "2409");
       execute("angle_C", "3190");
-      execute("angle_D", String(map(x, 100, 900, 1536, 2560)));
-      execute("angle_E", String(map(y, 100, 900, 1536, 2560)));
-      if (joy_still && joy_still_watch.after(1000)) {
+      execute("angle_D", String(map(x, 100, 900, 2560, 1536)));
+      execute("angle_E", String(map(y, 100, 900, 2560, 1536)));
+      if (joy_still && joy_still_watch.after(2000)) {
         state = DISH_STILL;
       }
       break;
@@ -116,14 +122,14 @@ void loop() {
       execute("angle_E", String(map(map(p, 4095 - 2341, 4095 - 1518, 530, 730), 100, 900, 1024, 3072)));
 
       if (dish_to_eat_watch.after(5000)) {
-        state = EAT;
+        state = EAT_FREE;
       }
       break;
     }
-    case EAT: { // TODO remap joystick
+    case EAT_FREE: {
       // free spoon
-      execute("angle_D", String(map(x, 100, 900, 1536, 2560)));
-      execute("angle_E", String(map(y, 100, 900, 1536, 2560)));
+      execute("angle_D", String(map(x, 100, 900, 2560, 1536)));
+      execute("angle_E", String(map(y, 500, 1300, 2560, 1536))); // remapped to make spoon perpendicualr to gravity
 
       if (joy_on_dish && joy_on_dish_watch.after(2000)) {
         state = DISH_FREE;
