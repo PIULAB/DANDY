@@ -6,17 +6,17 @@ t0 = time.time()
 angle = 2047
 
 while True:
-  if ser.inWaiting():
-    s = ser.read(ser.inWaiting())
-    print s
+  s = ser.readline()
+  if s != '{"mx64": "."}\r\n' and s != '\n':
+    print repr(s)
 
-  if time.time() - t0 > 1:
-    ser.write('angle_C:' + str(angle) + '\n')
-    t0 = time.time()
-
-    angle += 100
-    if angle > 3413:
-      angle = 2047
+  # if time.time() - t0 > 1:
+  #   ser.write('angle_C:' + str(angle) + '\n')
+  #   t0 = time.time()
+  #
+  #   angle += 100
+  #   if angle > 3413:
+  #     angle = 2047
 
 
 # {"key": "angle_C", "value": "2910" }

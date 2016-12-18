@@ -6,7 +6,7 @@ class Watch {
   public:
     Watch ();
     boolean after (long ms) {return millis() - t0 >= ms;}
-    void reset () {t0 = millis();}
+    bool reset () {t0 = millis(); return true;}
 };
 
 Watch::Watch () {
@@ -20,6 +20,9 @@ Watch::Watch () {
 #define SERVO_ID_5 0x05
 #define SERVO_ID_6 0x06
 #define SPEED 20
+
+#define still_size 100
+#define lane_size 100
 
 void setup() {
   Serial.begin(57600);
@@ -38,19 +41,35 @@ void setup() {
   pinMode(A1, INPUT);
 }
 
-enum States {INIT, FREE_SPOON, STILL_SPOON, EAT_GESTURE, DISH_GESTURE};  // TODO implement toString
-String States_to_string(States s) {
-  return s == FREE_SPOON ?"FREE_SPOON" :s == STILL_SPOON ?"STILL_SPOON" :s == EAT_GESTURE ?"EAT_GESTURE" :"???";
-}
+enum States {INIT, DISH_FREE, DISH_STILL, DISH_TO_EAT, EAT};  // TODO implement toString
 
 int x, y;
-bool flag_dish = false, flag_eat = false, eat_gesture_active = false;
-Watch dish_watch, eat_watch;
+Watch joy_on_dish_watch,
+      joy_on_eat_watch,
+      joy_still_watch,
+      dish_to_eat_watch;
+bool p_joy_on_dish,
+     p_joy_on_eat,
+     p_joy_still,
+     joy_on_dish,
+     joy_on_eat,
+     joy_still,
+     joy_in_lane;
+
 States state = INIT;
+String s;
 
 void loop() {
   x = analogRead(A0);
   y = analogRead(A1);
+
+  s = state == INIT
+    ?"INIT" :state == DISH_FREE
+      ?"DISH_FREE" :state == DISH_STILL
+        ?"DISH_STILL" :state == DISH_TO_EAT
+          ?"DISH_TO_EAT" :state == EAT
+            ?"EAT" :"";
+  once_print(s);
 
   switch (state) {
     case INIT: {
@@ -58,81 +77,86 @@ void loop() {
       execute("angle_B", "2409");
       execute("angle_C", "3190");
 
-      if (joystick_on_dish && dish_watch.after(2000)) {
-        state = DISH;
+      if (joy_on_dish && joy_on_dish_watch.after(2000)) {
+        state = DISH_FREE;
       }
-      if (joystick_on_eat && eat_watch.after(2000)) {
+      if (joy_on_eat && joy_on_eat_watch.after(2000)) {
+        dish_to_eat_watch.reset();
+        state = DISH_TO_EAT;
+      }
+      break;
+    }
+    case DISH_FREE: {
+      execute("angle_A", "2341");
+      execute("angle_B", "2409");
+      execute("angle_C", "3190");
+      execute("angle_D", String(map(x, 100, 900, 1536, 2560)));
+      execute("angle_E", String(map(y, 100, 900, 1536, 2560)));
+      if (joy_still && joy_still_watch.after(1000)) {
+        state = DISH_STILL;
+      }
+      break;
+    }
+    case DISH_STILL: {
+      if (!joy_in_lane) {
+        state = DISH_FREE;
+      }
+      if (joy_on_eat && joy_on_eat_watch.after(2000)) {
+        state = DISH_TO_EAT;
+        dish_to_eat_watch.reset();
+      }
+      break;
+    }
+    case DISH_TO_EAT: {  // state active during the journey from dish to eat
+      execute("angle_A", "1518");
+      execute("angle_B", "2038");
+      execute("angle_C", "3051");
+
+      unsigned int p = readPosition(SERVO_ID_1);
+      execute("angle_E", String(map(map(p, 4095 - 2341, 4095 - 1518, 530, 730), 100, 900, 1024, 3072)));
+
+      if (dish_to_eat_watch.after(5000)) {
         state = EAT;
       }
       break;
     }
-    case DISH: {
-      if (spoon_still && spoon_watch.after(1000)) {
-        state = STILL_SPOON;
+    case EAT: { // TODO remap joystick
+      // free spoon
+      execute("angle_D", String(map(x, 100, 900, 1536, 2560)));
+      execute("angle_E", String(map(y, 100, 900, 1536, 2560)));
+
+      if (joy_on_dish && joy_on_dish_watch.after(2000)) {
+        state = DISH_FREE;
       }
       break;
     }
-    case STILL_SPOON: {
-      if (!move_outside_lane && joystick_on_eat && eat_watch.after(2000)) {
-        state = EAT_GESTURE;
-      }
-      break;
-    }
-    case EAT: {
-      break;
-    }
-
   }
 
-  // gesture
-  if (y > 850) {
-    if (dish_watch.after(2000)) {
-      flag_dish = true;
-      Serial.println("{\"key\": \"FLAG_DISH\", \"value\": \"TRUE\" }");
-    }
-  } else if (y < 100) {
-    if (eat_watch.after(2000)) {
-      flag_eat = true;
-      Serial.println("{\"key\": \"FLAG_EAT\", \"value\": \"TRUE\" }");
-    }
-  } else {
-    flag_dish = false;
-    flag_eat = false;
-    dish_watch.reset();
-    eat_watch.reset();
-  }
+  p_joy_on_dish = joy_on_dish;
+  p_joy_on_eat = joy_on_eat;
+  p_joy_still = joy_still;
 
-  // spoon free movement
-  if (y >= 100 && y <=850) {
-    execute("angle_D", String(map(x, 100, 900, 1536, 2560)));
-    execute("angle_E", String(map(y, 100, 900, 1536, 2560)));
-  }
+  joy_on_dish = y > 850;
+  joy_on_eat = y < 100;
+  joy_still = y > 512 - still_size && y < 512 + still_size &&  x > 512 - still_size && x < 512 + still_size;
+  joy_in_lane = x > 512 - lane_size && x < 512 + lane_size && y < 512 + lane_size;
 
-  // dish gesture
-  if (flag_dish) {
-    execute("angle_A", "2341");
-    execute("angle_B", "2409");
-    execute("angle_C", "3190");
-    flag_dish = false;
-    dish_watch.reset();
-    eat_gesture_active = false;
-  }
-
-  // eat gesture
-  if (flag_eat) {
-    execute("angle_A", "1518");
-    execute("angle_B", "2038");
-    execute("angle_C", "3051");
-
-    flag_eat = false;
-    eat_watch.reset();
-    eat_gesture_active = true;
-  }
+  p_joy_on_dish != joy_on_dish && joy_on_dish_watch.reset();
+  p_joy_on_eat != joy_on_eat && joy_on_eat_watch.reset();
+  p_joy_still != joy_still && joy_still_watch.reset();
 
 //  if (eat_gesture_active) {
 //    unsigned int p = readPosition(SERVO_ID_1);
 //    execute("angle_E", String(map(map(p, 4095 - 2341, 4095 - 1518, 530, 730), 100, 900, 1024, 3072)));
 //  }
+}
+
+String once_previous = "";
+void once_print(String s) {
+  if (s == once_previous)
+    return;
+  once_previous = s;
+  Serial.println(s);
 }
 
 unsigned int angle;
@@ -157,11 +181,16 @@ void execute(String key, String value) {
 }
 
 void position_mx12(unsigned int id, unsigned int position, unsigned int speed) {
+  speed = speed / 2;
+  if (speed == 0)
+    speed = 1;
   DynamixelMX12.begin(850000, 2);
   DynamixelMX12.moveSpeed(id, position, speed);
 }
 
 void position_mx(unsigned int id, unsigned int position, unsigned int speed) {
+  if (speed == 0)
+    speed = 1;
   Dynamixel.begin(59000, 2);
   Dynamixel.servo(id, position, speed);
   Serial.println("{\"mx64\": \".\"}");
