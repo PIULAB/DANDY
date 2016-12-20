@@ -1,6 +1,10 @@
 arduino [--verify|--upload] [--board package:arch:board[:parameters]] [--port portname] [--pref name=value] [-v|--verbose] [--preserve-temp-files] [FILE.ino]
 
-~/arduino-1.6.10/arduino --upload joypad/joypad.ino
+# enrico
+~/arduino-1.6.10/arduino --upload joypad-demo2/joypad-demo2.ino
+
+#stefano
+~/Scrivania/arduino-1.6.8/arduino --upload joypad-demo2/joypad-demo2.ino
 
  1251  gcc --version
  1287  gcc -lstdc++ -o ik ik.cpp
