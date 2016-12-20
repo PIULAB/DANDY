@@ -47,7 +47,9 @@ int x, y, prev_x, prev_y;
 Watch joy_on_dish_watch,
       joy_on_eat_watch,
       joy_still_watch,
-      dish_to_eat_watch;
+      dish_to_eat_watch,
+      move_to_eat_watch,
+      move_to_dish_watch;
 bool p_joy_on_dish,
      p_joy_on_eat,
      p_joy_still,
@@ -94,11 +96,14 @@ void loop() {
     }
     case DISH_FREE: {
       execute("angle_A", "2341");
-      execute("angle_B", "2409");
-      execute("angle_C", "3190");
+      if (move_to_dish_watch.after(4000)) {
+        execute("angle_B", "2409");
+        execute("angle_C", "3190");
+      }
+
       execute("angle_D", String(map(x, 100, 900, 2560, 1536)));
       execute("angle_E", String(map(y, 100, 900, 2560, 1536)));
-      if (joy_still && joy_still_watch.after(2000)) {
+      if (move_to_dish_watch.after(4100) && joy_still && joy_still_watch.after(2000)) {
         state = DISH_STILL;
       }
       break;
@@ -110,18 +115,22 @@ void loop() {
       if (joy_on_eat && joy_on_eat_watch.after(2000)) {
         state = DISH_TO_EAT;
         dish_to_eat_watch.reset();
+        move_to_eat_watch.reset();
       }
       break;
     }
     case DISH_TO_EAT: {  // state active during the journey from dish to eat
-      execute("angle_A", "1518");
       execute("angle_B", "2038");
       execute("angle_C", "3051");
+      if (move_to_eat_watch.after(4000)){
+        execute("angle_A", "1518");
+      }
 
+      // tries to keep spoon ortogonal to gravity
       unsigned int p = readPosition(SERVO_ID_1);
       execute("angle_E", String(map(map(p, 4095 - 2341, 4095 - 1518, 530, 730), 100, 900, 1024, 3072)));
 
-      if (dish_to_eat_watch.after(5000)) {
+      if (move_to_eat_watch.after(4100) && dish_to_eat_watch.after(5000)) {
         state = EAT_FREE;
       }
       break;
@@ -133,6 +142,7 @@ void loop() {
 
       if (joy_on_dish && joy_on_dish_watch.after(2000)) {
         state = DISH_FREE;
+        move_to_dish_watch.reset();
       }
       break;
     }
