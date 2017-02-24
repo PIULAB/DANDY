@@ -101,8 +101,8 @@ void loop() {
         execute("angle_C", "3190");
       }
 
-      execute("angle_D", String(map(x, 100, 900, 2560, 1536)));
-      execute("angle_E", String(map(y, 100, 900, 2560, 1536)));
+      execute("angle_D", String(map(x, 100, 900, 2660, 1436)));
+      execute("angle_E", String(map(y, 100, 900, 2660, 1436)));
       if (move_to_dish_watch.after(4100) && joy_still && joy_still_watch.after(2000)) {
         state = DISH_STILL;
       }
@@ -126,9 +126,9 @@ void loop() {
         execute("angle_A", "1518");
       }
 
-      // tries to keep spoon ortogonal to gravity
-      unsigned int p = readPosition(SERVO_ID_1);
-      execute("angle_E", String(map(map(p, 4095 - 2341, 4095 - 1518, 530, 730), 100, 900, 1024, 3072)));
+      // lock angle_B to angle_E to keep spoon ortogonal to gravity
+      unsigned int p = readPosition(SERVO_ID_2);
+      execute("angle_E", String(map(map(p, 2409, 2038, 530, 730), 100, 900, 1024, 3072)));
 
       if (move_to_eat_watch.after(4100) && dish_to_eat_watch.after(5000)) {
         state = EAT_FREE;
@@ -138,7 +138,7 @@ void loop() {
     case EAT_FREE: {
       // free spoon
       execute("angle_D", String(map(x, 100, 900, 2560, 1536)));
-      execute("angle_E", String(map(y, 500, 1300, 2560, 1536))); // remapped to make spoon perpendicualr to gravity
+      execute("angle_E", String(map(y, 500, 1300, 2560, 1536))); // remapped to keep spoon ortogonal to gravity
 
       if (joy_on_dish && joy_on_dish_watch.after(2000)) {
         state = DISH_FREE;
@@ -153,7 +153,7 @@ void loop() {
   p_joy_still = joy_still;
 
   joy_on_dish = y > 850;
-  joy_on_eat = y < 100;
+  joy_on_eat = y < 300;
   joy_still = y > 512 - still_size && y < 512 + still_size &&  x > 512 - still_size && x < 512 + still_size;
   joy_in_lane = x > 512 - lane_size && x < 512 + lane_size && y < 512 + lane_size;
 
